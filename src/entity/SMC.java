@@ -3,8 +3,6 @@ package entity;
 import impl.JDBCUtils;
 import ui.Table;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,9 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.swing.JOptionPane.showMessageDialog;
-
-public class SMC extends Entity{
+public class SMC extends Entity {
     private String sname;
     private String cname;
     private String mname;
@@ -47,7 +43,7 @@ public class SMC extends Entity{
             ResultSet res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
-            list = new ArrayList<SMC>();
+            list = new ArrayList<>();
             do {
                 SMC smc = new SMC();
                 smc.sname = res.getString(1);
@@ -63,10 +59,8 @@ public class SMC extends Entity{
 
     public void showTotalQuery(List<SMC> list, Table table) {
         table.completeClean();
-        if (list == null || list.isEmpty()) {
-            showMessageDialog(null,"查询内容为空！","警告", JOptionPane.WARNING_MESSAGE);
+        if (isPrintListEmpty(list))
             return;
-        }
         table.addTableColumn(columnName);
         for (SMC item : list) {
             String[] arr = new String[3];

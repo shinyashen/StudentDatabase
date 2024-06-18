@@ -3,8 +3,6 @@ package entity;
 import impl.JDBCUtils;
 import ui.Table;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,13 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.swing.JOptionPane.showMessageDialog;
-
 public class Student extends Entity {
     private String sno;
     private String sname;
     private String sgender;
     private String mno;
+
+    private String columnName[] = {"学号", "姓名", "性别", "专业号"};
 
     public List<Student> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
@@ -39,7 +37,7 @@ public class Student extends Entity {
             ResultSet res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
-            list = new ArrayList<Student>();
+            list = new ArrayList<>();
             do {
                 Student s = new Student();
                 s.sno = res.getString(1);
@@ -56,21 +54,16 @@ public class Student extends Entity {
 
     public void showStudentQuery(List<Student> list, Table table) {
         table.completeClean();
-        if (list == null || list.isEmpty()) {
-            showMessageDialog(null,"查询内容为空！","警告",JOptionPane.WARNING_MESSAGE);
+        if (isPrintListEmpty(list))
             return;
-        }
-        String column[] = {"学号", "姓名", "性别", "专业号"};
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        for (String str : column)
-            tableModel.addColumn(str);
+        table.addTableColumn(columnName);
         for (Student item : list) {
             String[] arr = new String[4];
             arr[0] = item.sno;
             arr[1] = item.sname;
             arr[2] = (item.sgender.equals("M")) ? "男" : "女";
             arr[3] = item.mno;
-            tableModel.addRow(arr);
+            table.getDefaultTableModel().addRow(arr);
         }
     }
 }
