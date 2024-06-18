@@ -69,6 +69,27 @@ public class CollegeDataFrame extends Frame {
         }
     }
 
+    public void editFromMenu(String input) {
+        College college = new College();
+        actionType = 2;
+        List<College> list = college.doQuery(input, Entity.searchType.CNO);
+        if (list == null) {
+            showMessageDialog(null, "未找到该学校！", "操作失败", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        for (College item : list) { // just 1 item
+            textField1.setText(item.getCno());
+            textField2.setText(item.getCname());
+        }
+        showWindow(600, 300, 0);
+    }
+
+    public void deleteFromMenu(String input) {
+        College college = new College();
+        actionType = 1;
+        resultExit(college.doEdit(input,null,actionType));
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         label1 = new JLabel();

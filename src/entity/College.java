@@ -41,8 +41,8 @@ public class College extends Entity {
             list = new ArrayList<>();
             do {
                 College c = new College();
-                c.cno = res.getString(1);
-                c.cname = res.getString(2);
+                c.cno = res.getString(1).trim();
+                c.cname = res.getString(2).trim();
                 list.add(c);
             } while (res.next());
         } catch (SQLException e) {
@@ -73,7 +73,6 @@ public class College extends Entity {
         switch (actionType) {
             case 0:
                 sql = "insert into COLLEGE values('" + cno + "','" + cname + "')";
-                System.out.println(sql);
                 break;
             case 1:
                 sql = "delete from COLLEGE where CNO='" + cno + "'";

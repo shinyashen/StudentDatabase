@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
 
 import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -21,7 +20,7 @@ public class LoginFrame extends Frame {
         exit(0);
     }
 
-    private void passwordField1KeyTyped(KeyEvent e) {
+    private void passwordField1KeyPressed(KeyEvent e) {
         if (e.getKeyChar() == KeyEvent.VK_ENTER)
             doLogin(null);
     }
@@ -68,8 +67,8 @@ public class LoginFrame extends Frame {
         //---- passwordField1 ----
         passwordField1.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                passwordField1KeyTyped(e);
+            public void keyPressed(KeyEvent e) {
+                passwordField1KeyPressed(e);
             }
         });
         contentPane.add(passwordField1);

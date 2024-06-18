@@ -32,7 +32,6 @@ public class User {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("login success!");
         JDBCUtils.release(conn, ps);
         return 0;
     }

@@ -73,6 +73,29 @@ public class StudentDataFrame extends Frame {
         }
     }
 
+    public void editFromMenu(String input) {
+        Student student = new Student();
+        actionType = 2;
+        List<Student> list = student.doQuery(input, Entity.searchType.SNO);
+        if (list == null) {
+            showMessageDialog(null, "未找到该学生！", "操作失败", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        for (Student item : list) { // just 1 item
+            textField1.setText(item.getSno());
+            textField2.setText(item.getSname());
+            textField3.setText(item.getGender());
+            textField4.setText(item.getMno());
+        }
+        showWindow(600, 300, 0);
+    }
+
+    public void deleteFromMenu(String input) {
+        Student student = new Student();
+        actionType = 1;
+        resultExit(student.doEdit(input,null,null,null,actionType));
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         label1 = new JLabel();

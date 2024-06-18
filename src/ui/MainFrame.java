@@ -5,12 +5,15 @@ import entity.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainFrame extends Frame {
     private String[] options = { "STUDENT", "COLLEGE", "MAJOR", "SMC" };
+    private String prevOption = "";
 
     public MainFrame() {
         super();
@@ -31,42 +34,55 @@ public class MainFrame extends Frame {
             case 0: // 所有学生信息
                 Student student0 = new Student();
                 student0.showStudentQuery(student0.doQuery(input, Entity.searchType.ALL), table1);
+                prevOption = options[0];
                 break;
             case 1: // 所有专业信息
                 Major major0 = new Major();
                 major0.showMajorQuery(major0.doQuery(input, Entity.searchType.ALL), table1);
+                prevOption = options[2];
                 break;
             case 2: // 所有高等院校信息
                 College college0 = new College();
                 college0.showCollegeQuery(college0.doQuery(input, Entity.searchType.ALL), table1);
+                prevOption = options[1];
                 break;
             case 3: // 所有学生考研信息
                 SMC smc0 = new SMC();
                 smc0.showTotalQuery(smc0.doQuery(input, Entity.searchType.ALL), table1);
+                prevOption = options[3];
                 break;
             case 4: // 给定学号查询学生信息
                 Student student1 = new Student();
-                if(inputIsNotEmpty(input))
+                if(inputIsNotEmpty(input)) {
                     student1.showStudentQuery(student1.doQuery(input, Entity.searchType.SNO), table1);
+                    prevOption = options[0];
+                }
                 break;
             case 5: // 给定学号查询学生考研信息
                 SMC smc1 = new SMC();
-                if(inputIsNotEmpty(input))
+                if(inputIsNotEmpty(input)) {
                     smc1.showTotalQuery(smc1.doQuery(input, Entity.searchType.SNO), table1);
+                    prevOption = options[3];
+                }
                 break;
             case 6: // 给定专业名查询学生考研信息
                 SMC smc2 = new SMC();
-                if(inputIsNotEmpty(input))
+                if(inputIsNotEmpty(input)) {
                     smc2.showTotalQuery(smc2.doQuery(input, Entity.searchType.MNAME), table1);
+                    prevOption = options[3];
+                }
                 break;
             case 7: // 涉及专业跨考的学生考研信息
                 SMC smc3 = new SMC();
                 smc3.showTotalQuery(smc3.doQuery(input, Entity.searchType.SPECIFIC), table1);
+                prevOption = options[3];
                 break;
             default:
                 break; // do nothing
         }
     }
+
+
 
     public void doEdit(ActionEvent e) {
         // judge action type
@@ -119,6 +135,95 @@ public class MainFrame extends Frame {
         exit(0);
     }
 
+    private void table1MousePressed(MouseEvent e) {
+        if (SwingUtilities.isRightMouseButton(e)) {
+            // 获取鼠标右键选中的行
+            int row = table1.rowAtPoint(e.getPoint());
+            if (row == -1)
+                return;
+            // 获取已选中的行
+            int[] rows = table1.getSelectedRows();
+            boolean inSelected = false;
+            // 判断当前右键所在行是否已选中
+            for (int r : rows) {
+                if (row == r) {
+                    inSelected = true;
+                    break;
+                }
+            }
+            // 当前鼠标右键点击所在行不被选中则高亮显示选中行
+            if (!inSelected)
+                table1.setRowSelectionInterval(row, row);
+        }
+    }
+
+    private void table1MouseReleased(MouseEvent e) {
+        if (SwingUtilities.isRightMouseButton(e))
+            popupMenu1.show(e.getComponent(), e.getX(), e.getY());
+    }
+
+    private void menuItem1MouseReleased(MouseEvent e) {
+        String input;
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (table1.getSelectedRow() != -1)
+                input = table1.getValueAt(table1.getSelectedRow(), 0).toString().trim();
+            else
+                return;
+        } else
+            return;
+        switch (prevOption) {
+            case "STUDENT":
+                StudentDataFrame studentDataFrame = new StudentDataFrame();
+                studentDataFrame.editFromMenu(input);
+                break;
+            case "COLLEGE":
+                CollegeDataFrame collegeDataFrame = new CollegeDataFrame();
+                collegeDataFrame.editFromMenu(input);
+                break;
+            case "MAJOR":
+                MajorDataFrame majorDataFrame = new MajorDataFrame();
+                majorDataFrame.editFromMenu(input);
+                break;
+            case "SMC":
+                SMCDataFrame smcDataFrame = new SMCDataFrame();
+                smcDataFrame.editFromMenu(input);
+                break;
+            default:
+                break; // do nothing
+        }
+    }
+
+    private void menuItem2MouseReleased(MouseEvent e) {
+        String input;
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (table1.getSelectedRow() != -1)
+                input = table1.getValueAt(table1.getSelectedRow(), 0).toString().trim();
+            else
+                return;
+        } else
+            return;
+        switch (prevOption) {
+            case "STUDENT":
+                StudentDataFrame studentDataFrame = new StudentDataFrame();
+                studentDataFrame.deleteFromMenu(input);
+                break;
+            case "COLLEGE":
+                CollegeDataFrame collegeDataFrame = new CollegeDataFrame();
+                collegeDataFrame.deleteFromMenu(input);
+                break;
+            case "MAJOR":
+                MajorDataFrame majorDataFrame = new MajorDataFrame();
+                majorDataFrame.deleteFromMenu(input);
+                break;
+            case "SMC":
+                SMCDataFrame smcDataFrame = new SMCDataFrame();
+                smcDataFrame.deleteFromMenu(input);
+                break;
+            default:
+                break; // do nothing
+        }
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         comboBox1 = new JComboBox<>();
@@ -132,6 +237,9 @@ public class MainFrame extends Frame {
         button3 = new JButton();
         button4 = new JButton();
         button5 = new JButton();
+        popupMenu1 = new JPopupMenu();
+        menuItem1 = new JMenuItem();
+        menuItem2 = new JMenuItem();
 
         //======== this ========
         setTitle("\u5b66\u751f\u8003\u7814\u4fe1\u606f\u7ba1\u7406\u7cfb\u7edf");
@@ -167,6 +275,19 @@ public class MainFrame extends Frame {
 
         //======== scrollPane1 ========
         {
+
+            //---- table1 ----
+            table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            table1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    table1MousePressed(e);
+                }
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    table1MouseReleased(e);
+                }
+            });
             scrollPane1.setViewportView(table1);
         }
         contentPane.add(scrollPane1);
@@ -199,6 +320,30 @@ public class MainFrame extends Frame {
         contentPane.setPreferredSize(new Dimension(500, 405));
         pack();
         setLocationRelativeTo(getOwner());
+
+        //======== popupMenu1 ========
+        {
+            popupMenu1.add(menuItem1);
+            popupMenu1.add(menuItem2);
+        }
+
+        //---- menuItem1 ----
+        menuItem1.setText("\u7f16\u8f91(E)");
+        menuItem1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                menuItem1MouseReleased(e);
+            }
+        });
+
+        //---- menuItem2 ----
+        menuItem2.setText("\u5220\u9664(D)");
+        menuItem2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                menuItem2MouseReleased(e);
+            }
+        });
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
@@ -213,5 +358,8 @@ public class MainFrame extends Frame {
     private JButton button3;
     private JButton button4;
     private JButton button5;
+    private JPopupMenu popupMenu1;
+    private JMenuItem menuItem1;
+    private JMenuItem menuItem2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

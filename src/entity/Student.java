@@ -43,10 +43,10 @@ public class Student extends Entity {
             list = new ArrayList<>();
             do {
                 Student s = new Student();
-                s.sno = res.getString(1);
-                s.sname = res.getString(2);
-                s.sgender = res.getString(3);
-                s.mno = res.getString(4);
+                s.sno = res.getString(1).trim();
+                s.sname = res.getString(2).trim();
+                s.sgender = res.getString(3).trim();
+                s.mno = res.getString(4).trim();
                 list.add(s);
             } while (res.next());
         } catch (SQLException e) {
@@ -86,7 +86,6 @@ public class Student extends Entity {
         switch (actionType) {
             case 0:
                 sql = "insert into STUDENT values('" + sno + "','" + sname + "','" + transgender + "','" + mno + "')";
-                System.out.println(sql);
                 break;
             case 1:
                 sql = "delete from STUDENT where SNO='" + sno + "'";

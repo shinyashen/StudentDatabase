@@ -29,7 +29,7 @@ public class SMCDataFrame extends Frame {
         SMC smc = new SMC();
         String sno = textField1.getText();
         String cno = textField2.getText();
-        String mno = textField2.getText();
+        String mno = textField3.getText();
         resultExit(smc.doEdit(sno,cno,mno,actionType));
     }
 
@@ -54,7 +54,7 @@ public class SMCDataFrame extends Frame {
                     if (input == null || input.isEmpty())
                         showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
                 }
-                List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO);
+                List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO1);
                 if (list == null) {
                     showMessageDialog(null, "未找到该学生信息！", "操作失败", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -69,6 +69,28 @@ public class SMCDataFrame extends Frame {
             default:
                 break; // do nothing
         }
+    }
+
+    public void editFromMenu(String input) {
+        SMC smc = new SMC();
+        actionType = 2;
+        List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO1);
+        if (list == null) {
+            showMessageDialog(null, "未找到该学生信息！", "操作失败", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        for (SMC item : list) { // just 1 item
+            textField1.setText(item.getSname());
+            textField2.setText(item.getCname());
+            textField3.setText(item.getMname());
+        }
+        showWindow(600, 300, 0);
+    }
+
+    public void deleteFromMenu(String input) {
+        SMC smc = new SMC();
+        actionType = 1;
+        resultExit(smc.doEdit(input,null,null,3));
     }
 
     public void initComponents() {

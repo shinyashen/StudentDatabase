@@ -36,8 +36,11 @@ public class SMC extends Entity {
             case SPECIFIC:
                 sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and A.MNO<>D.TARGETMNO) order by A.SNO asc";
                 break;
-            case ALLNO:
+            case ALLNO1:
                 sql = "select * from SMC where SNO='" + input + "'";
+                break;
+            case ALLNO2:
+                sql = "select * from SMC X where exists(select * from STUDENT Y where Y.SNO=X.SNO and Y.SNAME='" + input + "')";
                 break;
             default:
                 break; // do nothing
@@ -53,9 +56,9 @@ public class SMC extends Entity {
             list = new ArrayList<>();
             do {
                 SMC smc = new SMC();
-                smc.sname = res.getString(1);
-                smc.cname = res.getString(2);
-                smc.mname = res.getString(3);
+                smc.sname = res.getString(1).trim();
+                smc.cname = res.getString(2).trim();
+                smc.mname = res.getString(3).trim();
                 list.add(smc);
             } while (res.next());
         } catch (SQLException e) {
@@ -87,7 +90,6 @@ public class SMC extends Entity {
         switch (actionType) {
             case 0:
                 sql = "insert into SMC values('" + sno + "','" + cno + "','" + mno + "')";
-                System.out.println(sql);
                 break;
             case 1:
                 sql = "delete from SMC where SNO='" + sno + "'";
@@ -95,6 +97,8 @@ public class SMC extends Entity {
             case 2:
                 sql = "update SMC set SNO='" + sno + "',CNO='" + cno + "',TARGETMNO='" + mno + "' where SNO='" + sno + "'";
                 break;
+            case 3: // trick: sno = sname
+                sql = "delete from SMC X where exists(select * from STUDENT Y where Y.SNO=X.SNO and Y.SNAME='" + sno + "')";
             default:
                 break; // do nothing
         }

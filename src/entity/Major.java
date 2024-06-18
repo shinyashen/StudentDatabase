@@ -41,8 +41,8 @@ public class Major extends Entity {
             list = new ArrayList<>();
             do {
                 Major j = new Major();
-                j.mno = res.getString(1);
-                j.mname = res.getString(2);
+                j.mno = res.getString(1).trim();
+                j.mname = res.getString(2).trim();
                 list.add(j);
             } while (res.next());
         } catch (SQLException e) {
@@ -73,7 +73,6 @@ public class Major extends Entity {
         switch (actionType) {
             case 0:
                 sql = "insert into MAJOR values('" + mno + "','" + mname + "')";
-                System.out.println(sql);
                 break;
             case 1:
                 sql = "delete from MAJOR where MNO='" + mno + "'";
