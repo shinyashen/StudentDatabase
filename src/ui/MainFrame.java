@@ -82,8 +82,6 @@ public class MainFrame extends Frame {
         }
     }
 
-
-
     public void doEdit(ActionEvent e) {
         // judge action type
         int actionType = -1;
