@@ -101,11 +101,12 @@ public class MainFrame extends Frame {
                     break;
                 case "MAJOR":
                     MajorDataFrame majorDataFrame = new MajorDataFrame();
-                    majorDataFrame.showWindow(600, 300, 0);
+//                    majorDataFrame.setActionType(actionType);
                     break;
                 case "SMC":
                     SMCDataFrame smcDataFrame = new SMCDataFrame();
-                    smcDataFrame.showWindow(600, 300, 0);
+                    smcDataFrame.setActionType(actionType);
+                    smcDataFrame.init();
                     break;
                 default:
                     break; // do nothing

@@ -1,11 +1,75 @@
 package ui;
 
+import entity.College;
+import entity.Entity;
+import entity.SMC;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.*;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 public class SMCDataFrame extends Frame {
+    private int actionType;
+
     public SMCDataFrame() {
         super();
+    }
+
+    private void frameDispose(ActionEvent e) {
+        dispose();
+    }
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
+    }
+
+    public void submitEdit(ActionEvent e) {
+        SMC smc = new SMC();
+        String sno = textField1.getText();
+        String cno = textField2.getText();
+        String mno = textField2.getText();
+        resultExit(smc.doEdit(sno,cno,mno,actionType));
+    }
+
+    public void init() {
+        String input = "";
+        SMC smc = new SMC();
+        switch (actionType) {
+            case 0: // 增加
+                showWindow(600, 300, 0);
+                break;
+            case 1: // 删除，不弹出窗口直接操作
+                while(input == null || input.equals("")) {
+                    input = JOptionPane.showInputDialog(null, "请输入需要删除的学生学号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
+                    if (input == null || input.equals(""))
+                        showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
+                }
+                resultExit(smc.doEdit(input,null,null,actionType));
+                break;
+            case 2: // 为修改时需要初始化数据
+                while(input == null || input.equals("")) {
+                    input = JOptionPane.showInputDialog(null, "请输入需要修改的学生学号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
+                    if (input == null || input.equals(""))
+                        showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
+                }
+                List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO);
+                if (list == null) {
+                    showMessageDialog(null, "未找到该学生信息！", "操作失败", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                for (SMC item : list) { // just 1 item
+                    textField1.setText(item.getSname());
+                    textField2.setText(item.getCname());
+                    textField3.setText(item.getMname());
+                }
+                showWindow(600, 300, 0);
+                break;
+            default:
+                break; // do nothing
+        }
     }
 
     public void initComponents() {
@@ -53,11 +117,13 @@ public class SMCDataFrame extends Frame {
 
         //---- button1 ----
         button1.setText("\u63d0\u4ea4");
+        button1.addActionListener(e -> submitEdit(e));
         contentPane.add(button1);
         button1.setBounds(new Rectangle(new Point(35, 170), button1.getPreferredSize()));
 
         //---- button2 ----
         button2.setText("\u8fd4\u56de");
+        button2.addActionListener(e -> frameDispose(e));
         contentPane.add(button2);
         button2.setBounds(new Rectangle(new Point(140, 170), button2.getPreferredSize()));
 

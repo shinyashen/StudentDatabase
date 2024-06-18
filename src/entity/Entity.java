@@ -7,7 +7,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Entity {
     public enum searchType{
-        ALL, SNO, CNO, MNO, MNAME, TARGETMNO, SPECIFIC
+        ALL, SNO, CNO, MNO, MNAME, TARGETMNO, SPECIFIC, ALLNO
     }
 
     public <T> boolean isPrintListEmpty(List<T> list){

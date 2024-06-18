@@ -18,21 +18,26 @@ public class SMC extends Entity {
 
     public List<SMC> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
+        if (conn == null)
+            return null;
         String sql = null;
         switch (type) {
             case ALL:
-                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO)";
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO) order by A.SNO asc";
                 break;
             case SNO:
             case CNO:
             case TARGETMNO:
-                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and D." + type + "='" + input + "')";
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and D." + type + "='" + input + "') order by A.SNO asc";
                 break;
             case MNAME:
-                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO) and C." + type + "='" + input + "'";
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO) and C." + type + "='" + input + "' order by A.SNO asc";
                 break;
             case SPECIFIC:
-                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and A.MNO<>D.TARGETMNO)";
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and A.MNO<>D.TARGETMNO) order by A.SNO asc";
+                break;
+            case ALLNO:
+                sql = "select * from SMC where SNO='" + input + "'";
                 break;
             default:
                 break; // do nothing
@@ -76,6 +81,8 @@ public class SMC extends Entity {
 
     public int doEdit(String sno, String cno, String mno, int actionType) {
         Connection conn = JDBCUtils.getConnection();
+        if (conn == null)
+            return -1;
         String sql = null;
         switch (actionType) {
             case 0:
@@ -86,7 +93,7 @@ public class SMC extends Entity {
                 sql = "delete from SMC where SNO='" + sno + "'";
                 break;
             case 2:
-                sql = "update SMC set SNO='" + sno + "',CNO='" + cno + "',MNO='" + mno + "' where SNO='" + sno + "'";
+                sql = "update SMC set SNO='" + sno + "',CNO='" + cno + "',TARGETMNO='" + mno + "' where SNO='" + sno + "'";
                 break;
             default:
                 break; // do nothing
@@ -95,9 +102,9 @@ public class SMC extends Entity {
         try {
             ps = conn.prepareStatement(sql);
             if (ps.executeUpdate(sql) < 1) // empty
-                return -1;
+                return -2;
         } catch (SQLException e) {
-            return -2;
+            return -3;
         }
         JDBCUtils.release(conn, ps);
         return 0;
