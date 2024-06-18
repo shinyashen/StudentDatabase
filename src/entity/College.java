@@ -18,7 +18,7 @@ public class College {
     private String cno;
     private String cname;
 
-    public List<College> queryAll() {
+    public List<College> doQuery() {
         Connection conn = JDBCUtils.getConnection();
         if (conn == null)
             return null;
@@ -40,7 +40,6 @@ public class College {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("query 2 success!");
         JDBCUtils.release(conn, ps);
         return list;
     }

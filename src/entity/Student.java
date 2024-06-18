@@ -14,44 +14,25 @@ import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class Student {
+public class Student extends Entity {
     private String sno;
     private String sname;
     private String sgender;
     private String mno;
 
-    public List<Student> queryAll() {
+    public List<Student> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
-        if (conn == null)
-            return null;
-        String sql = "select * from STUDENT order by SNO asc";
-        List<Student> list = null;
-        PreparedStatement ps = null;
-        try {
-            ps = conn.prepareStatement(sql);
-            ResultSet res = ps.executeQuery();
-            if (!res.next()) // empty
-                return null;
-            list = new ArrayList<Student>();
-            do {
-                Student s = new Student();
-                s.sno = res.getString(1);
-                s.sname = res.getString(2);
-                s.sgender = res.getString(3);
-                s.mno = res.getString(4);
-                list.add(s);
-            } while (res.next());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String sql = null;
+        switch (type) {
+            case ALL:
+                sql = "select * from STUDENT order by SNO asc";
+                break;
+            case SNO:
+                sql = "select * from STUDENT where SNO='" + input + "'";
+                break;
+            default:
+                break; // do nothing
         }
-        System.out.println("query 0 success!");
-        JDBCUtils.release(conn, ps);
-        return list;
-    }
-
-    public List<Student> querySpecific(String sno) {
-        Connection conn = JDBCUtils.getConnection();
-        String sql = "select * from STUDENT where SNO = '" + sno + "'";
         List<Student> list = null;
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -70,7 +51,6 @@ public class Student {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("query 4 success!");
         return list;
     }
 

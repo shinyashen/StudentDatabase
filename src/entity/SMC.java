@@ -14,20 +14,36 @@ import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class SMC {
+public class SMC extends Entity{
     private String sname;
     private String cname;
     private String mname;
+    private String columnName[] = {"姓名", "目标学校名", "目标专业名"};
 
-    public List<SMC> queryAll() {
+    public List<SMC> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
-        if (conn == null)
-            return null;
-        String sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO)";
+        String sql = null;
+        switch (type) {
+            case ALL:
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO)";
+                break;
+            case SNO:
+            case CNO:
+            case TARGETMNO:
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and D." + type + "='" + input + "')";
+                break;
+            case MNAME:
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO) and C." + type + "='" + input + "'";
+                break;
+            case SPECIFIC:
+                sql = "select A.SNAME, B.CNAME, C.MNAME from STUDENT A, COLLEGE B, MAJOR C where exists(select * from SMC D where A.SNO=D.SNO and B.CNO=D.CNO and C.MNO=D.TARGETMNO and A.MNO<>D.TARGETMNO)";
+                break;
+            default:
+                break; // do nothing
+        }
         List<SMC> list = null;
-        PreparedStatement ps = null;
         try {
-            ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
@@ -42,8 +58,6 @@ public class SMC {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("query 3 success!");
-        JDBCUtils.release(conn, ps);
         return list;
     }
 
@@ -53,16 +67,13 @@ public class SMC {
             showMessageDialog(null,"查询内容为空！","警告", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String column[] = {"姓名", "目标学校名", "目标专业名"};
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        for (String str : column)
-            tableModel.addColumn(str);
+        table.addTableColumn(columnName);
         for (SMC item : list) {
             String[] arr = new String[3];
             arr[0] = item.sname;
             arr[1] = item.cname;
             arr[2] = item.mname;
-            tableModel.addRow(arr);
+            table.getDefaultTableModel().addRow(arr);
         }
     }
 }

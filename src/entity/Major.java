@@ -17,8 +17,9 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class Major {
     private String mno;
     private String mname;
+    private String columnName[] = {"专业号", "专业名"};
 
-    public List<Major> queryAll() {
+    public List<Major> doQuery() {
         Connection conn = JDBCUtils.getConnection();
         if (conn == null)
             return null;
@@ -40,7 +41,6 @@ public class Major {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("query 1 success!");
         JDBCUtils.release(conn, ps);
         return list;
     }
@@ -51,15 +51,12 @@ public class Major {
             showMessageDialog(null,"查询内容为空！","警告", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String column[] = {"专业号", "专业名"};
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        for (String str : column)
-            tableModel.addColumn(str);
+        table.addTableColumn(columnName);
         for (Major item : list) {
             String[] arr = new String[2];
             arr[0] = item.mno;
             arr[1] = item.mname;
-            tableModel.addRow(arr);
+            table.getDefaultTableModel().addRow(arr);
         }
     }
 }

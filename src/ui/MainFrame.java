@@ -1,9 +1,6 @@
 package ui;
 
-import entity.College;
-import entity.Major;
-import entity.SMC;
-import entity.Student;
+import entity.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,39 +19,52 @@ public class MainFrame extends Frame {
         super();
     }
 
+    public Boolean inputIsNotEmpty(String input) {
+        if(input == null || input.isEmpty()) {
+            showMessageDialog(null,"特定查询的输入内容不能为空！","警告",JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
     public void doQuery(ActionEvent e) {
         int index = ((DefaultComboBoxModel<String>) comboBox1.getModel()).getIndexOf(comboBox1.getSelectedItem());
+        String input = textField1.getText();
         switch (index) {
             case 0: // 所有学生信息
                 Student student0 = new Student();
-                student0.showStudentQuery(student0.queryAll(), table1);
+                student0.showStudentQuery(student0.doQuery(input, Entity.searchType.ALL), table1);
                 break;
             case 1: // 所有专业信息
                 Major major0 = new Major();
-                major0.showMajorQuery(major0.queryAll(), table1);
+                major0.showMajorQuery(major0.doQuery(), table1);
                 break;
             case 2: // 所有高等院校信息
                 College college0 = new College();
-                college0.showCollegeQuery(college0.queryAll(), table1);
+                college0.showCollegeQuery(college0.doQuery(), table1);
                 break;
             case 3: // 所有学生考研信息
                 SMC smc0 = new SMC();
-                smc0.showTotalQuery(smc0.queryAll(), table1);
+                smc0.showTotalQuery(smc0.doQuery(input, Entity.searchType.ALL), table1);
                 break;
             case 4: // 给定学号查询学生信息
                 Student student1 = new Student();
-                String sno = textField1.getText();
-                if(sno.isEmpty()) {
-                    showMessageDialog(null,"特定查询的输入内容不能为空！","警告",JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                student1.showStudentQuery(student1.querySpecific(sno), table1);
+                if(inputIsNotEmpty(input))
+                    student1.showStudentQuery(student1.doQuery(input, Entity.searchType.SNO), table1);
                 break;
             case 5: // 给定学号查询学生考研信息
+                SMC smc1 = new SMC();
+                if(inputIsNotEmpty(input))
+                    smc1.showTotalQuery(smc1.doQuery(input, Entity.searchType.SNO), table1);
                 break;
             case 6: // 给定专业名查询学生考研信息
+                SMC smc2 = new SMC();
+                if(inputIsNotEmpty(input))
+                    smc2.showTotalQuery(smc2.doQuery(input, Entity.searchType.MNAME), table1);
                 break;
             case 7: // 涉及专业跨考的学生考研信息
+                SMC smc3 = new SMC();
+                smc3.showTotalQuery(smc3.doQuery(input, Entity.searchType.SPECIFIC), table1);
                 break;
             default:
                 break; // do nothing
