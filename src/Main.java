@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         initGlobalFontSetting(new Font("微软雅黑", Font.PLAIN, 12)); // 全局窗口字体样式
         LoginFrame loginFrame = new LoginFrame();
-        loginFrame.showWindow(700, 300);
+        loginFrame.showWindow(700, 300,1);
     }
 
     public static void initGlobalFontSetting(Font fnt) {

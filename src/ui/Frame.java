@@ -14,10 +14,11 @@ public abstract class Frame extends JFrame {
     }
 
     // 设置并显示窗口
-    public void showWindow(int width, int height) {
+    public void showWindow(int width, int height, int exitOnClose) {
         SwingUtilities.invokeLater(() -> {
             setLocation(width, height);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            if (exitOnClose == 1)
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
             setVisible(true);
         });
     }

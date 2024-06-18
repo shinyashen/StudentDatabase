@@ -13,7 +13,7 @@ import java.util.List;
 public class Major extends Entity {
     private String mno;
     private String mname;
-    private String columnName[] = {"专业号", "专业名"};
+    private String[] columnName = {"专业号", "专业名"};
 
     public List<Major> doQuery() {
         Connection conn = JDBCUtils.getConnection();
@@ -22,9 +22,10 @@ public class Major extends Entity {
         String sql = "select * from MAJOR order by MNO asc";
         List<Major> list = null;
         PreparedStatement ps = null;
+        ResultSet res = null;
         try {
             ps = conn.prepareStatement(sql);
-            ResultSet res = ps.executeQuery();
+            res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
             list = new ArrayList<>();
@@ -37,7 +38,7 @@ public class Major extends Entity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        JDBCUtils.release(conn, ps);
+        JDBCUtils.release(conn, ps, res);
         return list;
     }
 
@@ -52,5 +53,42 @@ public class Major extends Entity {
             arr[1] = item.mname;
             table.getDefaultTableModel().addRow(arr);
         }
+    }
+
+    public int doEdit(String mno, String mname, int actionType) {
+        Connection conn = JDBCUtils.getConnection();
+        String sql = null;
+        switch (actionType) {
+            case 0:
+                sql = "insert into MAJOR values('" + mno + "','" + mname + "')";
+                System.out.println(sql);
+                break;
+            case 1:
+                sql = "delete from MAJOR where MNO='" + mno + "'";
+                break;
+            case 2:
+                sql = "update MAJOR set MNO='" + mno + "',MNAME='" + mname + "' where MNO='" + mno + "'";
+                break;
+            default:
+                break; // do nothing
+        }
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement(sql);
+            if (ps.executeUpdate(sql) < 1) // empty
+                return -1;
+        } catch (SQLException e) {
+            return -2;
+        }
+        JDBCUtils.release(conn, ps);
+        return 0;
+    }
+
+    public String getMno() {
+        return mno;
+    }
+
+    public String getMname() {
+        return mname;
     }
 }

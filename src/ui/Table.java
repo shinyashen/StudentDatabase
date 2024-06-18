@@ -11,7 +11,7 @@ public class Table extends JTable {
         tableModel.setColumnCount(0);
     }
 
-    public void addTableColumn(String list[]) {
+    public void addTableColumn(String[] list) {
         DefaultTableModel tableModel = this.getDefaultTableModel();
         for (String str : list)
             tableModel.addColumn(str);

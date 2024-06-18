@@ -15,8 +15,7 @@ public class Student extends Entity {
     private String sname;
     private String sgender;
     private String mno;
-
-    private String columnName[] = {"学号", "姓名", "性别", "专业号"};
+    private String[] columnName = {"学号", "姓名", "性别", "专业号"};
 
     public List<Student> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
@@ -32,9 +31,11 @@ public class Student extends Entity {
                 break; // do nothing
         }
         List<Student> list = null;
+        PreparedStatement ps = null;
+        ResultSet res = null;
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet res = ps.executeQuery();
+            ps = conn.prepareStatement(sql);
+            res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
             list = new ArrayList<>();
@@ -49,6 +50,7 @@ public class Student extends Entity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        JDBCUtils.release(conn, ps, res);
         return list;
     }
 
@@ -65,5 +67,57 @@ public class Student extends Entity {
             arr[3] = item.mno;
             table.getDefaultTableModel().addRow(arr);
         }
+    }
+
+    public int doEdit(String sno, String sname, String sgender, String mno, int actionType) {
+        String transgender = sgender;
+        if (!(transgender == null) && !transgender.isEmpty()) {
+            if (transgender.equals("男"))
+                transgender = "M";
+            if (transgender.equals("女"))
+                transgender = "F";
+        }
+        Connection conn = JDBCUtils.getConnection();
+        String sql = null;
+        switch (actionType) {
+            case 0:
+                sql = "insert into STUDENT values('" + sno + "','" + sname + "','" + transgender + "','" + mno + "')";
+                System.out.println(sql);
+                break;
+            case 1:
+                sql = "delete from STUDENT where SNO='" + sno + "'";
+                break;
+            case 2:
+                sql = "update STUDENT set SNO='" + sno + "',SNAME='" + sname + "',SGENDER='" + transgender + "',MNO='" + mno + "' where SNO='" + sno + "'";
+                break;
+            default:
+                break; // do nothing
+        }
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement(sql);
+            if (ps.executeUpdate(sql) < 1) // empty
+                return -1;
+        } catch (SQLException e) {
+            return -2;
+        }
+        JDBCUtils.release(conn, ps);
+        return 0;
+    }
+
+    public String getSno() {
+        return sno;
+    }
+
+    public String getSname() {
+        return sname;
+    }
+
+    public String getGender() {
+        return sgender;
+    }
+
+    public String getMno() {
+        return mno;
     }
 }

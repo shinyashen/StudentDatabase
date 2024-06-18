@@ -39,7 +39,7 @@ new FormModel {
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 295
 				"y": 20
-				"width": 95
+				"width": 105
 				"height": 25
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
@@ -47,7 +47,7 @@ new FormModel {
 				"text": "查询"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "doQuery", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 410
+				"x": 420
 				"y": 20
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -62,11 +62,43 @@ new FormModel {
 				"x": 20
 				"y": 65
 				"height": 270
-				"width": 450
+				"width": 460
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button2"
+				"text": "增加数据"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "doEdit", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 20
+				"y": 350
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button3"
+				"text": "删除数据"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "doEdit", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 145
+				"y": 350
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button4"
+				"text": "修改数据"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "doEdit", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 270
+				"y": 350
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button5"
+				"text": "退出系统"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "frameExit", true ) )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 395
+				"y": 350
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 10, 15 )
-			"size": new java.awt.Dimension( 490, 425 )
+			"size": new java.awt.Dimension( 500, 405 )
 		} )
 	}
 }

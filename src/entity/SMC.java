@@ -14,7 +14,7 @@ public class SMC extends Entity {
     private String sname;
     private String cname;
     private String mname;
-    private String columnName[] = {"姓名", "目标学校名", "目标专业名"};
+    private String[] columnName = {"姓名", "目标学校名", "目标专业名"};
 
     public List<SMC> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
@@ -38,9 +38,11 @@ public class SMC extends Entity {
                 break; // do nothing
         }
         List<SMC> list = null;
+        PreparedStatement ps = null;
+        ResultSet res = null;
         try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet res = ps.executeQuery();
+            ps = conn.prepareStatement(sql);
+            res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
             list = new ArrayList<>();
@@ -54,6 +56,7 @@ public class SMC extends Entity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        JDBCUtils.release(conn, ps, res);
         return list;
     }
 
@@ -69,5 +72,46 @@ public class SMC extends Entity {
             arr[2] = item.mname;
             table.getDefaultTableModel().addRow(arr);
         }
+    }
+
+    public int doEdit(String sno, String cno, String mno, int actionType) {
+        Connection conn = JDBCUtils.getConnection();
+        String sql = null;
+        switch (actionType) {
+            case 0:
+                sql = "insert into SMC values('" + sno + "','" + cno + "','" + mno + "')";
+                System.out.println(sql);
+                break;
+            case 1:
+                sql = "delete from SMC where SNO='" + sno + "'";
+                break;
+            case 2:
+                sql = "update SMC set SNO='" + sno + "',CNO='" + cno + "',MNO='" + mno + "' where SNO='" + sno + "'";
+                break;
+            default:
+                break; // do nothing
+        }
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement(sql);
+            if (ps.executeUpdate(sql) < 1) // empty
+                return -1;
+        } catch (SQLException e) {
+            return -2;
+        }
+        JDBCUtils.release(conn, ps);
+        return 0;
+    }
+
+    public String getSname() {
+        return sname;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public String getMname() {
+        return mname;
     }
 }

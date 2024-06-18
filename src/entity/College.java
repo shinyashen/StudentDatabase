@@ -13,7 +13,7 @@ import java.util.List;
 public class College extends Entity {
     private String cno;
     private String cname;
-    private String columnName[] = {"学校编号", "学校名"};
+    private String[] columnName = {"学校编号", "学校名"};
 
     public List<College> doQuery() {
         Connection conn = JDBCUtils.getConnection();
@@ -22,9 +22,10 @@ public class College extends Entity {
         String sql = "select * from COLLEGE order by CNO asc";
         List<College> list = null;
         PreparedStatement ps = null;
+        ResultSet res = null;
         try {
             ps = conn.prepareStatement(sql);
-            ResultSet res = ps.executeQuery();
+            res = ps.executeQuery();
             if (!res.next()) // empty
                 return null;
             list = new ArrayList<>();
@@ -37,7 +38,7 @@ public class College extends Entity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        JDBCUtils.release(conn, ps);
+        JDBCUtils.release(conn, ps, res);
         return list;
     }
 
@@ -52,5 +53,42 @@ public class College extends Entity {
             arr[1] = item.cname;
             table.getDefaultTableModel().addRow(arr);
         }
+    }
+
+    public int doEdit(String cno, String cname, int actionType) {
+        Connection conn = JDBCUtils.getConnection();
+        String sql = null;
+        switch (actionType) {
+            case 0:
+                sql = "insert into COLLEGE values('" + cno + "','" + cname + "')";
+                System.out.println(sql);
+                break;
+            case 1:
+                sql = "delete from COLLEGE where CNO='" + cno + "'";
+                break;
+            case 2:
+                sql = "update COLLEGE set CNO='" + cno + "',CNAME='" + cname + "' where CNO='" + cno + "'";
+                break;
+            default:
+                break; // do nothing
+        }
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement(sql);
+            if (ps.executeUpdate(sql) < 1) // empty
+                return -1;
+        } catch (SQLException e) {
+            return -2;
+        }
+        JDBCUtils.release(conn, ps);
+        return 0;
+    }
+
+    public String getCno() {
+        return cno;
+    }
+
+    public String getCname() {
+        return cname;
     }
 }

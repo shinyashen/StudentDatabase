@@ -6,9 +6,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
+import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MainFrame extends Frame {
+    private String[] options = { "STUDENT", "COLLEGE", "MAJOR", "SMC" };
+
     public MainFrame() {
         super();
     }
@@ -65,16 +68,52 @@ public class MainFrame extends Frame {
         }
     }
 
-    public void doAdd(ActionEvent e) {
+    public void doEdit(ActionEvent e) {
+        // judge action type
+        int actionType = -1;
+        switch(e.getActionCommand()) {
+            case "增加数据":
+                actionType = 0;
+                break;
+            case "删除数据":
+                actionType = 1;
+                break;
+            case "修改数据":
+                actionType = 2;
+                break;
+            default:
+                break; // do nothing
+        }
 
+        // select table type
+        String tableType = (String) JOptionPane.showInputDialog(null,"请选择所要修改的表:", "选择表", JOptionPane.INFORMATION_MESSAGE, null, options, "STUDENT");
+        if (tableType != null) {
+            switch (tableType) {
+                case "STUDENT":
+                    StudentDataFrame studentDataFrame = new StudentDataFrame();
+                    studentDataFrame.setActionType(actionType);
+                    studentDataFrame.init();
+                    break;
+                case "COLLEGE":
+                    CollegeDataFrame collegeDataFrame = new CollegeDataFrame();
+                    collegeDataFrame.showWindow(600, 300, 0);
+                    break;
+                case "MAJOR":
+                    MajorDataFrame majorDataFrame = new MajorDataFrame();
+                    majorDataFrame.showWindow(600, 300, 0);
+                    break;
+                case "SMC":
+                    SMCDataFrame smcDataFrame = new SMCDataFrame();
+                    smcDataFrame.showWindow(600, 300, 0);
+                    break;
+                default:
+                    break; // do nothing
+            }
+        }
     }
 
-    public void doDelete(ActionEvent e) {
-
-    }
-
-    public void doUpdate(ActionEvent e) {
-
+    private void frameExit(ActionEvent e) {
+        exit(0);
     }
 
     public void initComponents() {
@@ -86,6 +125,10 @@ public class MainFrame extends Frame {
         scrollPane1 = new JScrollPane();
         table1 = new Table();
         table1.getTableHeader().setReorderingAllowed(false);
+        button2 = new JButton();
+        button3 = new JButton();
+        button4 = new JButton();
+        button5 = new JButton();
 
         //======== this ========
         setTitle("\u5b66\u751f\u8003\u7814\u4fe1\u606f\u7ba1\u7406\u7cfb\u7edf");
@@ -111,22 +154,46 @@ public class MainFrame extends Frame {
         contentPane.add(label1);
         label1.setBounds(20, 20, label1.getPreferredSize().width, 20);
         contentPane.add(textField1);
-        textField1.setBounds(295, 20, 95, 25);
+        textField1.setBounds(295, 20, 105, 25);
 
         //---- button1 ----
         button1.setText("\u67e5\u8be2");
         button1.addActionListener(e -> doQuery(e));
         contentPane.add(button1);
-        button1.setBounds(new Rectangle(new Point(410, 20), button1.getPreferredSize()));
+        button1.setBounds(new Rectangle(new Point(420, 20), button1.getPreferredSize()));
 
         //======== scrollPane1 ========
         {
             scrollPane1.setViewportView(table1);
         }
         contentPane.add(scrollPane1);
-        scrollPane1.setBounds(20, 65, 450, 270);
+        scrollPane1.setBounds(20, 65, 460, 270);
 
-        contentPane.setPreferredSize(new Dimension(490, 425));
+        //---- button2 ----
+        button2.setText("\u589e\u52a0\u6570\u636e");
+        button2.addActionListener(e -> doEdit(e));
+        contentPane.add(button2);
+        button2.setBounds(new Rectangle(new Point(20, 350), button2.getPreferredSize()));
+
+        //---- button3 ----
+        button3.setText("\u5220\u9664\u6570\u636e");
+        button3.addActionListener(e -> doEdit(e));
+        contentPane.add(button3);
+        button3.setBounds(new Rectangle(new Point(145, 350), button3.getPreferredSize()));
+
+        //---- button4 ----
+        button4.setText("\u4fee\u6539\u6570\u636e");
+        button4.addActionListener(e -> doEdit(e));
+        contentPane.add(button4);
+        button4.setBounds(new Rectangle(new Point(270, 350), button4.getPreferredSize()));
+
+        //---- button5 ----
+        button5.setText("\u9000\u51fa\u7cfb\u7edf");
+        button5.addActionListener(e -> frameExit(e));
+        contentPane.add(button5);
+        button5.setBounds(new Rectangle(new Point(395, 350), button5.getPreferredSize()));
+
+        contentPane.setPreferredSize(new Dimension(500, 405));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -139,5 +206,9 @@ public class MainFrame extends Frame {
     private JButton button1;
     private JScrollPane scrollPane1;
     private Table table1;
+    private JButton button2;
+    private JButton button3;
+    private JButton button4;
+    private JButton button5;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

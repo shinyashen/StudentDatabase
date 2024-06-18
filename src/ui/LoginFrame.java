@@ -82,7 +82,7 @@ public class LoginFrame extends Frame {
             default:
                 showMessageDialog(null,"登录成功！","登录成功",JOptionPane.INFORMATION_MESSAGE);
                 MainFrame mainFrame = new MainFrame();
-                mainFrame.showWindow(600, 300);
+                mainFrame.showWindow(600, 300,1);
                 dispose();
         }
     }
