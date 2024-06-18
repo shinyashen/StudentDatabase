@@ -25,18 +25,13 @@ public class StudentDataFrame extends Frame {
         this.actionType = actionType;
     }
 
-    public void resultExit(int result) {
-        switch (result) {
-            case -1:
-                showMessageDialog(null, "执行该数据变更操作失败！", "操作失败", JOptionPane.ERROR_MESSAGE);
-                break;
-            case -2:
-                showMessageDialog(null, "数据变更过程中发生错误！", "操作失败", JOptionPane.ERROR_MESSAGE);
-                break;
-            default:
-                showMessageDialog(null, "数据变更操作成功！", "操作成功", JOptionPane.INFORMATION_MESSAGE);
-        }
-        dispose();
+    public void submitEdit(ActionEvent e) {
+        Student student = new Student();
+        String sno = textField1.getText();
+        String sname = textField2.getText();
+        String sgender = textField3.getText();
+        String mno = textField4.getText();
+        resultExit(student.doEdit(sno,sname,sgender,mno,actionType));
     }
 
     public void init() {
@@ -48,7 +43,7 @@ public class StudentDataFrame extends Frame {
                 break;
             case 1: // 删除，不弹出窗口直接操作
                 while(input == null || input.equals("")) {
-                    input = JOptionPane.showInputDialog(null, "请输入需要修改的学生学号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
+                    input = JOptionPane.showInputDialog(null, "请输入需要删除的学生学号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
                     if (input == null || input.equals(""))
                         showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
                 }
@@ -61,7 +56,7 @@ public class StudentDataFrame extends Frame {
                         showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
                 }
                 List<Student> list = student.doQuery(input, Entity.searchType.SNO);
-                if (student.doQuery(input, Entity.searchType.SNO) == null) {
+                if (list == null) {
                     showMessageDialog(null, "未找到该学生！", "操作失败", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -147,15 +142,6 @@ public class StudentDataFrame extends Frame {
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
-    }
-
-    public void submitEdit(ActionEvent e) {
-        Student student = new Student();
-        String sno = textField1.getText();
-        String sname = textField2.getText();
-        String sgender = textField3.getText();
-        String mno = textField4.getText();
-        resultExit(student.doEdit(sno,sname,sgender,mno,actionType));
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off

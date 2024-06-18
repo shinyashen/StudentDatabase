@@ -15,11 +15,21 @@ public class College extends Entity {
     private String cname;
     private String[] columnName = {"学校编号", "学校名"};
 
-    public List<College> doQuery() {
+    public List<College> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
         if (conn == null)
             return null;
-        String sql = "select * from COLLEGE order by CNO asc";
+        String sql = null;
+        switch (type) {
+            case ALL:
+                sql = "select * from COLLEGE order by CNO asc";
+                break;
+            case CNO:
+                sql = "select * from COLLEGE where CNO='" + input + "'";
+                break;
+            default:
+                break; // do nothing
+        }
         List<College> list = null;
         PreparedStatement ps = null;
         ResultSet res = null;
@@ -57,6 +67,8 @@ public class College extends Entity {
 
     public int doEdit(String cno, String cname, int actionType) {
         Connection conn = JDBCUtils.getConnection();
+        if (conn == null)
+            return -1;
         String sql = null;
         switch (actionType) {
             case 0:
@@ -76,9 +88,9 @@ public class College extends Entity {
         try {
             ps = conn.prepareStatement(sql);
             if (ps.executeUpdate(sql) < 1) // empty
-                return -1;
+                return -2;
         } catch (SQLException e) {
-            return -2;
+            return -3;
         }
         JDBCUtils.release(conn, ps);
         return 0;

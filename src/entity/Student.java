@@ -19,6 +19,8 @@ public class Student extends Entity {
 
     public List<Student> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
+        if (conn == null)
+            return null;
         String sql = null;
         switch (type) {
             case ALL:
@@ -78,6 +80,8 @@ public class Student extends Entity {
                 transgender = "F";
         }
         Connection conn = JDBCUtils.getConnection();
+        if (conn == null)
+            return -1;
         String sql = null;
         switch (actionType) {
             case 0:
@@ -97,9 +101,9 @@ public class Student extends Entity {
         try {
             ps = conn.prepareStatement(sql);
             if (ps.executeUpdate(sql) < 1) // empty
-                return -1;
+                return -2;
         } catch (SQLException e) {
-            return -2;
+            return -3;
         }
         JDBCUtils.release(conn, ps);
         return 0;

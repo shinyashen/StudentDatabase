@@ -4,12 +4,6 @@ import java.sql.*;
 import java.util.ResourceBundle;
 
 public class JDBCUtils {
-    private static ResourceBundle bundle;
-
-    /**
-     * 获取连接方法
-     *
-     */
     public static Connection getConnection() {
         Connection conn = null;
         try {
@@ -43,13 +37,7 @@ public class JDBCUtils {
                 e.printStackTrace();
             }
         }
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        release(conn);
     }
 
     public static void release(Connection conn, PreparedStatement ps, ResultSet rs) {
@@ -60,19 +48,6 @@ public class JDBCUtils {
                 e.printStackTrace();
             }
         }
-        if (ps != null) {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        release(conn, ps);
     }
 }

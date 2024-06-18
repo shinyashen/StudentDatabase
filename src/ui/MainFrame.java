@@ -38,7 +38,7 @@ public class MainFrame extends Frame {
                 break;
             case 2: // 所有高等院校信息
                 College college0 = new College();
-                college0.showCollegeQuery(college0.doQuery(), table1);
+                college0.showCollegeQuery(college0.doQuery(input, Entity.searchType.ALL), table1);
                 break;
             case 3: // 所有学生考研信息
                 SMC smc0 = new SMC();
@@ -96,7 +96,8 @@ public class MainFrame extends Frame {
                     break;
                 case "COLLEGE":
                     CollegeDataFrame collegeDataFrame = new CollegeDataFrame();
-                    collegeDataFrame.showWindow(600, 300, 0);
+                    collegeDataFrame.setActionType(actionType);
+                    collegeDataFrame.init();
                     break;
                 case "MAJOR":
                     MajorDataFrame majorDataFrame = new MajorDataFrame();
