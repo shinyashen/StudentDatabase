@@ -48,6 +48,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField1"
+				addEvent( new FormEvent( "java.awt.event.KeyListener", "keyTyped", "passwordField1KeyTyped", true ) )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 70
 				"y": 60

@@ -1,12 +1,7 @@
 package ui;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.util.AbstractList;
-import java.util.List;
 
-import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public abstract class Frame extends JFrame {

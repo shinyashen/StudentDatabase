@@ -1,11 +1,10 @@
 package impl;
 
 import java.sql.*;
-import java.util.ResourceBundle;
 
 public class JDBCUtils {
     public static Connection getConnection() {
-        Connection conn = null;
+        Connection conn;
         try {
             String driver = "oracle.jdbc.driver.OracleDriver";
             Class.forName(driver);

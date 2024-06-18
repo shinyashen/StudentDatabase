@@ -2,9 +2,9 @@ package ui;
 
 import entity.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.*;
 
 import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;

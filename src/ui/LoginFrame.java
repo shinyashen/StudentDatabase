@@ -2,9 +2,12 @@ package ui;
 
 import entity.User;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -16,6 +19,11 @@ public class LoginFrame extends Frame {
 
     private void frameExit(ActionEvent e) {
         exit(0);
+    }
+
+    private void passwordField1KeyTyped(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER)
+            doLogin(null);
     }
 
     public void initComponents() {
@@ -56,6 +64,14 @@ public class LoginFrame extends Frame {
         button2.addActionListener(e -> frameExit(e));
         contentPane.add(button2);
         button2.setBounds(new Rectangle(new Point(150, 100), button2.getPreferredSize()));
+
+        //---- passwordField1 ----
+        passwordField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                passwordField1KeyTyped(e);
+            }
+        });
         contentPane.add(passwordField1);
         passwordField1.setBounds(70, 60, 140, passwordField1.getPreferredSize().height);
 
@@ -67,7 +83,7 @@ public class LoginFrame extends Frame {
 
     public void doLogin(ActionEvent e) {
         String userid = textField1.getText();
-        String password = passwordField1.getText();
+        String password = String.valueOf(passwordField1.getPassword());
         User user = new User(userid, password);
         switch (user.checkIsValid()) {
             case -1:

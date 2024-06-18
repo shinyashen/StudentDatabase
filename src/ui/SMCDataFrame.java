@@ -1,13 +1,12 @@
 package ui;
 
-import entity.College;
 import entity.Entity;
 import entity.SMC;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import javax.swing.*;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -42,17 +41,17 @@ public class SMCDataFrame extends Frame {
                 showWindow(600, 300, 0);
                 break;
             case 1: // 删除，不弹出窗口直接操作
-                while(input == null || input.equals("")) {
+                while(input == null || input.isEmpty()) {
                     input = JOptionPane.showInputDialog(null, "请输入需要删除的学生学号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
-                    if (input == null || input.equals(""))
+                    if (input == null || input.isEmpty())
                         showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
                 }
                 resultExit(smc.doEdit(input,null,null,actionType));
                 break;
             case 2: // 为修改时需要初始化数据
-                while(input == null || input.equals("")) {
+                while(input == null || input.isEmpty()) {
                     input = JOptionPane.showInputDialog(null, "请输入需要修改的学生学号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
-                    if (input == null || input.equals(""))
+                    if (input == null || input.isEmpty())
                         showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
                 }
                 List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO);
