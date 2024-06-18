@@ -15,11 +15,21 @@ public class Major extends Entity {
     private String mname;
     private String[] columnName = {"专业号", "专业名"};
 
-    public List<Major> doQuery() {
+    public List<Major> doQuery(String input, searchType type) {
         Connection conn = JDBCUtils.getConnection();
         if (conn == null)
             return null;
-        String sql = "select * from MAJOR order by MNO asc";
+        String sql = null;
+        switch (type) {
+            case ALL:
+                sql = "select * from MAJOR order by MNO asc";
+                break;
+            case MNO:
+                sql = "select * from MAJOR where MNO='" + input + "'";
+                break;
+            default:
+                break; // do nothing
+        }
         List<Major> list = null;
         PreparedStatement ps = null;
         ResultSet res = null;
@@ -57,6 +67,8 @@ public class Major extends Entity {
 
     public int doEdit(String mno, String mname, int actionType) {
         Connection conn = JDBCUtils.getConnection();
+        if (conn == null)
+            return -1;
         String sql = null;
         switch (actionType) {
             case 0:
@@ -76,9 +88,9 @@ public class Major extends Entity {
         try {
             ps = conn.prepareStatement(sql);
             if (ps.executeUpdate(sql) < 1) // empty
-                return -1;
+                return -2;
         } catch (SQLException e) {
-            return -2;
+            return -3;
         }
         JDBCUtils.release(conn, ps);
         return 0;

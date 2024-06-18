@@ -1,11 +1,73 @@
 package ui;
 
+import entity.College;
+import entity.Entity;
+import entity.Major;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.*;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 public class MajorDataFrame extends Frame {
+    private int actionType;
+
     public MajorDataFrame() {
         super();
+    }
+
+    private void frameDispose(ActionEvent e) {
+        dispose();
+    }
+
+    public void setActionType(int actionType) {
+        this.actionType = actionType;
+    }
+
+    public void submitEdit(ActionEvent e) {
+        Major major = new Major();
+        String mno = textField1.getText();
+        String mname = textField2.getText();
+        resultExit(major.doEdit(mno,mname,actionType));
+    }
+
+    public void init() {
+        String input = "";
+        Major major = new Major();
+        switch (actionType) {
+            case 0: // 增加
+                showWindow(600, 300, 0);
+                break;
+            case 1: // 删除，不弹出窗口直接操作
+                while(input == null || input.equals("")) {
+                    input = JOptionPane.showInputDialog(null, "请输入需要删除的专业编号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
+                    if (input == null || input.equals(""))
+                        showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
+                }
+                resultExit(major.doEdit(input,null,actionType));
+                break;
+            case 2: // 为修改时需要初始化数据
+                while(input == null || input.equals("")) {
+                    input = JOptionPane.showInputDialog(null, "请输入需要修改的专业编号：", "请输入", JOptionPane.INFORMATION_MESSAGE);
+                    if (input == null || input.equals(""))
+                        showMessageDialog(null,"输入内容不能为空，请重新输入！","警告",JOptionPane.WARNING_MESSAGE);
+                }
+                List<Major> list = major.doQuery(input, Entity.searchType.MNO);
+                if (list == null) {
+                    showMessageDialog(null, "未找到该学校！", "操作失败", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                for (Major item : list) { // just 1 item
+                    textField1.setText(item.getMno());
+                    textField2.setText(item.getMname());
+                }
+                showWindow(600, 300, 0);
+                break;
+            default:
+                break; // do nothing
+        }
     }
 
     public void initComponents() {
@@ -45,11 +107,13 @@ public class MajorDataFrame extends Frame {
 
         //---- button1 ----
         button1.setText("\u63d0\u4ea4");
+        button1.addActionListener(e -> submitEdit(e));
         contentPane.add(button1);
         button1.setBounds(new Rectangle(new Point(35, 135), button1.getPreferredSize()));
 
         //---- button2 ----
         button2.setText("\u8fd4\u56de");
+        button2.addActionListener(e -> frameDispose(e));
         contentPane.add(button2);
         button2.setBounds(new Rectangle(new Point(140, 135), button2.getPreferredSize()));
 

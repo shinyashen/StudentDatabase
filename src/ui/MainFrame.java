@@ -34,7 +34,7 @@ public class MainFrame extends Frame {
                 break;
             case 1: // 所有专业信息
                 Major major0 = new Major();
-                major0.showMajorQuery(major0.doQuery(), table1);
+                major0.showMajorQuery(major0.doQuery(input, Entity.searchType.ALL), table1);
                 break;
             case 2: // 所有高等院校信息
                 College college0 = new College();
@@ -101,7 +101,8 @@ public class MainFrame extends Frame {
                     break;
                 case "MAJOR":
                     MajorDataFrame majorDataFrame = new MajorDataFrame();
-//                    majorDataFrame.setActionType(actionType);
+                    majorDataFrame.setActionType(actionType);
+                    majorDataFrame.init();
                     break;
                 case "SMC":
                     SMCDataFrame smcDataFrame = new SMCDataFrame();
