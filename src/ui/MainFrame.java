@@ -4,9 +4,7 @@ import entity.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 import static java.lang.System.exit;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -222,6 +220,11 @@ public class MainFrame extends Frame {
         }
     }
 
+    private void textField1KeyPressed(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER)
+            doQuery(null);
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         comboBox1 = new JComboBox<>();
@@ -241,6 +244,7 @@ public class MainFrame extends Frame {
 
         //======== this ========
         setTitle("\u5b66\u751f\u8003\u7814\u4fe1\u606f\u7ba1\u7406\u7cfb\u7edf");
+        setResizable(false);
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -262,6 +266,14 @@ public class MainFrame extends Frame {
         label1.setText("\u67e5\u8be2\u5185\u5bb9");
         contentPane.add(label1);
         label1.setBounds(20, 20, label1.getPreferredSize().width, 20);
+
+        //---- textField1 ----
+        textField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                textField1KeyPressed(e);
+            }
+        });
         contentPane.add(textField1);
         textField1.setBounds(295, 20, 105, 25);
 

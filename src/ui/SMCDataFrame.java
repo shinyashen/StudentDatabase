@@ -6,6 +6,8 @@ import entity.SMC;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -74,7 +76,7 @@ public class SMCDataFrame extends Frame {
     public void editFromMenu(String input) {
         SMC smc = new SMC();
         actionType = 2;
-        List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO1);
+        List<SMC> list = smc.doQuery(input, Entity.searchType.ALLNO2);
         if (list == null) {
             showMessageDialog(null, "未找到该学生信息！", "操作失败", JOptionPane.ERROR_MESSAGE);
             return;
@@ -93,6 +95,11 @@ public class SMCDataFrame extends Frame {
         resultExit(smc.doEdit(input,null,null,3));
     }
 
+    private void textField3KeyPressed(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER)
+            submitEdit(null);
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         label1 = new JLabel();
@@ -107,6 +114,7 @@ public class SMCDataFrame extends Frame {
 
         //======== this ========
         setTitle("\u8003\u7814\u4fe1\u606f\u64cd\u4f5c");
+        setResizable(false);
         var contentPane = getContentPane();
         contentPane.setLayout(null);
 
@@ -133,6 +141,14 @@ public class SMCDataFrame extends Frame {
         label4.setText("\u4e13\u4e1a\u7f16\u53f7");
         contentPane.add(label4);
         label4.setBounds(30, 120, 51, 25);
+
+        //---- textField3 ----
+        textField3.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                textField3KeyPressed(e);
+            }
+        });
         contentPane.add(textField3);
         textField3.setBounds(90, 125, 110, textField3.getPreferredSize().height);
 

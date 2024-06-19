@@ -6,6 +6,8 @@ import entity.Student;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -96,6 +98,11 @@ public class StudentDataFrame extends Frame {
         resultExit(student.doEdit(input,null,null,null,actionType));
     }
 
+    private void textField4KeyPressed(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER)
+            submitEdit(null);
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         label1 = new JLabel();
@@ -146,6 +153,14 @@ public class StudentDataFrame extends Frame {
         label5.setText("\u4e13\u4e1a\u7f16\u53f7");
         contentPane.add(label5);
         label5.setBounds(30, 155, label5.getPreferredSize().width, 21);
+
+        //---- textField4 ----
+        textField4.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                textField4KeyPressed(e);
+            }
+        });
         contentPane.add(textField4);
         textField4.setBounds(90, 155, 110, textField4.getPreferredSize().height);
 

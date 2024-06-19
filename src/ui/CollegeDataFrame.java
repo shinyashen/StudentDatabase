@@ -6,6 +6,8 @@ import entity.Entity;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -90,6 +92,11 @@ public class CollegeDataFrame extends Frame {
         resultExit(college.doEdit(input,null,actionType));
     }
 
+    private void textField2KeyPressed(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ENTER)
+            submitEdit(null);
+    }
+
     public void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         label1 = new JLabel();
@@ -122,6 +129,14 @@ public class CollegeDataFrame extends Frame {
         label3.setText("\u5b66\u6821\u540d\u79f0");
         contentPane.add(label3);
         label3.setBounds(30, 85, label3.getPreferredSize().width, 20);
+
+        //---- textField2 ----
+        textField2.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                textField2KeyPressed(e);
+            }
+        });
         contentPane.add(textField2);
         textField2.setBounds(90, 90, 110, textField2.getPreferredSize().height);
 
